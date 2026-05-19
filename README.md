@@ -1,10 +1,10 @@
-# 🍛 Thamizhan Treats
+# Thamizhan Treats
 
 Thamizhan Treats is a full stack traditional Tamil Nadu food eCommerce application developed using React.js for frontend and Django REST Framework for backend.
 
 The platform allows users to explore authentic Tamil foods, add products to cart/wishlist, place orders, and provide reviews after successful purchases.
 
-## 🔥 Features
+##  Features
 
 - JWT Authentication
 - Responsive UI
