@@ -1,0 +1,88 @@
+/* 🌍 FULL PAGE */
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #fff8f0, #ffe6d5);
+}
+
+/* 📦 MAIN CONTAINER */
+.checkout-container {
+  max-width: 500px;
+  margin: 80px auto;
+  padding: 30px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+/* 🧾 TITLE */
+.checkout-title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #ff5722;
+  font-size: 26px;
+}
+
+/* 📝 INPUTS */
+.checkout-container input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  outline: none;
+  transition: 0.3s;
+  font-size: 14px;
+}
+
+.checkout-container input:focus {
+  border-color: #ff5722;
+  box-shadow: 0 0 5px rgba(255, 87, 34, 0.4);
+}
+
+/* 🚀 BUTTON */
+.checkout-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #ff5722, #ff784e);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.checkout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 87, 34, 0.3);
+}
+
+/* ✨ ANIMATION */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.total-box {
+  margin-top: 15px;
+  padding: 10px;
+  background: #fff3e0;
+  border-radius: 8px;
+}
+
+.total-box p {
+  margin: 5px 0;
+}
+
+.total-box h3 {
+  margin-top: 10px;
+  color: #ff5722;
+}

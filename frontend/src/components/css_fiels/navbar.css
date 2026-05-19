@@ -1,0 +1,166 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden; /* prevents right scroll */
+}
+
+
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+ color: white;
+  position: absolute;   /* key change */
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: transparent; /* remove brown */
+  z-index: 10; /* above video + overlay */
+
+
+}
+
+
+.logo img {
+  height: 100px;     /* 🔥 control size */
+  /* width: auto;      keep aspect ratio */
+  object-fit: contain;
+  display: block;
+  background: ;
+  
+}
+
+.nav-links a {
+  margin-left: 20px;
+  text-decoration: none;
+  color:rgb(255, 255, 255);
+  font-size: 18px;
+  font-family: cursive;
+
+}
+
+.login-btn {
+  color: black;
+  background: #ffc44f;
+  padding: 6px 12px;
+  border-radius: 5px;
+}
+.login-btn:hover{
+ 
+   cursor: pointer;
+  
+}
+/* TOGGLE BUTTON */
+.menu-toggle {
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: none;
+}
+/* MOBILE */
+@media (max-width: 768px) {
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 70px;
+    right: 0;
+
+    background: rgba(0,0,0,0.9);
+    width: 200px;
+
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+
+    padding: 20px;
+    border-radius: 10px;
+
+    transform: translateX(100%);
+    transition: 0.3s;
+  }
+
+  .nav-links.active {
+    transform: translateX(0);
+  }
+}
+/* MOBILE CLEAN DROPDOWN */
+@media (max-width: 768px) {
+
+  .menu-toggle {
+    display: block;
+    z-index: 1001;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 70px;
+    right: 15px;
+
+    width: 220px;
+    padding: 15px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(10px); /* 🔥 premium glass effect */
+
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+
+    transition: all 0.3s ease;
+  }
+
+  /* SHOW DROPDOWN */
+  .nav-links.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  /* LINKS STYLE */
+  .nav-links a {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+
+    text-align: left;
+    font-size: 16px;
+
+    transition: 0.3s;
+  }
+
+  /* HOVER EFFECT */
+  .nav-links a:hover {
+    background: rgba(255, 152, 0, 0.2);
+    color: #ff9800;
+  }
+
+  /* LOGIN BUTTON FIX */
+  .login-btn {
+    background: #ffc44f;
+    color: black;
+    text-align: center;
+  }
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+}
