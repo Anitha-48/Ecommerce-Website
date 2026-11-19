@@ -5,34 +5,54 @@ import "./css_fiels/home.css";
 import "./css_fiels/about.css";
 import "./css_fiels/contact.css" ;
 import axios from "axios";
-
-
-
-
-
-
+import { API_BASE_URL } from "../api";
 function Home() {
+  const token = localStorage.getItem("access_token");
+  const isAdmin = localStorage.getItem("is_admin") === "true";
+  const shopPath = !token ? "/login" : isAdmin ? "/products" : "/dashboard";
+
   return (
     <div className="home">
 
       {/* 🔥 BACKGROUND VIDEO */}
-      <video autoPlay loop muted className="bg-video">
-        <source src="/videos/food-bg.mp4" type="video/mp4" />
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        className="bg-video"
+        aria-hidden="true"
+      >
+        <source
+          src="/videos/Preparing_traditional_food_video_183e95e7.mp4"
+          type="video/mp4"
+        />
       </video>
 
       {/* 🌑 OVERLAY */}
-      <div className="overlay"></div>
+      <div className="home-overlay"></div>
 
       {/* 🎯 CONTENT */}
       <div className="hero">
-        <h1 className="title">🍛 தமிழன் Treats</h1>
+        <p className="hero-eyebrow">A taste of Tamil Nadu</p>
+        <h1 className="title">Tradition, served with love.</h1>
         <p className="subtitle">
-          Authentic Tamil Nadu Traditional Foods & Snacks
+          Discover authentic Tamil Nadu foods and traditional snacks, made to
+          bring the warmth of home to every table.
         </p>
-
-        {/* <button className="explore-btn">
-          Explore Menu →
-        </button> */}
+        <div className="hero-actions">
+          <Link
+            className="hero-button hero-button-primary"
+            to={shopPath}
+            state={!token ? { from: { pathname: "/dashboard" } } : undefined}
+          >
+            Shop traditional foods
+          </Link>
+          <a className="hero-button hero-button-secondary" href="#about">
+            Explore recipes
+          </a>
+        </div>
       </div>
 
     </div>
@@ -131,7 +151,7 @@ export function Contact() {
     e.preventDefault();
 
     try {
-      await axios.post("http://127.0.0.1:8000/contact/", form);
+      await axios.post(`${API_BASE_URL}contact/`, form);
 
       alert("Message sent ✅");
 

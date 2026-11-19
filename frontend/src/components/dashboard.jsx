@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./css_fiels/dashboard.css";
+import { API_BASE_URL } from "../api";
 
 function Dashboard() {
 
-  const BASE = "http://127.0.0.1:8000/";
+  const BASE = API_BASE_URL;
 
   const token = localStorage.getItem("access_token");
   const username = localStorage.getItem("username");
@@ -28,17 +29,17 @@ function Dashboard() {
 
   // FETCH DATA
   useEffect(() => {
-    fetchProducts();
-    fetchCart();
-    fetchWishlist();
-  }, []);
-
-  // GET PRODUCTS
-  const fetchProducts = () => {
+    const authHeaders = { Authorization: `Bearer ${token}` };
     axios.get(`${BASE}all_products/`)
       .then(res => setProducts(res.data))
-      .catch(err => console.log(err));
-  };
+      .catch(() => console.error("Could not load products."));
+    axios.get(`${BASE}cart/`, { headers: authHeaders })
+      .then(res => setCart(res.data))
+      .catch(() => console.error("Could not load cart."));
+    axios.get(`${BASE}wishlist/`, { headers: authHeaders })
+      .then(res => setWishlist(res.data))
+      .catch(() => console.error("Could not load wishlist."));
+  }, [BASE, token]);
 
   // GET CART
   const fetchCart = () => {
@@ -165,6 +166,10 @@ function Dashboard() {
 
           <button onClick={() => navigate("/wishlist")}>
             ❤️ Wishlist ({wishlist.length})
+          </button>
+
+          <button onClick={() => navigate("/orders")}>
+            📦 My Orders
           </button>
 
           <button onClick={handleLogout}>

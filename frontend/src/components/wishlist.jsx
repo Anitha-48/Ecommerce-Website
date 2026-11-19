@@ -1,23 +1,28 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./css_fiels/wishlist.css"
-import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../api";
 
 function Wishlist() {
   const [wishlist, setWishlist] = useState([]);
 
   const token = localStorage.getItem("access_token");
-  const navigate = useNavigate();
 
   const headers = {
     Authorization: `Bearer ${token}`,
   };
 
-  const BASE = "http://127.0.0.1:8000/";
+  const BASE = API_BASE_URL;
 
   useEffect(() => {
-    fetchWishlist();
-  }, []);
+    axios.get(`${BASE}wishlist/`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    })
+      .then(res => setWishlist(res.data))
+      .catch(() => console.error("Could not load wishlist."));
+  }, [BASE]);
 
   const fetchWishlist = () => {
     axios.get(`${BASE}wishlist/`, { headers })
@@ -67,7 +72,7 @@ function Wishlist() {
            <img
   src={
     item.picture
-      ? `http://127.0.0.1:8000${item.picture}`
+      ? `${API_BASE_URL.replace(/\/$/, "")}${item.picture}`
       : "/images/no-image.png"
   }
   alt={item.product_name}

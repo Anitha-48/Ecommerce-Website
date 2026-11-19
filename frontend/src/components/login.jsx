@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import "./css_fiels/login.css"
 import { toast } from "react-toastify";
+import { API_BASE_URL } from "../api";
 
 function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
 const [showPassword, setShowPassword] = useState(false);
   const [user, setUser] = useState({
     username: "",
@@ -21,7 +23,7 @@ const [showPassword, setShowPassword] = useState(false);
 
   try {
     const res = await axios.post(
-      "http://127.0.0.1:8000/login/",
+      `${API_BASE_URL}login/`,
       user
     );
 
@@ -35,15 +37,15 @@ const [showPassword, setShowPassword] = useState(false);
     // ✅ STORE ROLE
     localStorage.setItem("is_admin", res.data.is_admin);
 
-    // 🔥 REDIRECT BASED ON ROLE
+    // Staff accounts go to the admin panel; customers resume shopping.
     if (res.data.is_admin) {
-      navigate("/products");   // ADMIN
+      navigate("/products", { replace: true });
     } else {
-      navigate("/dashboard");  // USER
+      navigate(location.state?.from?.pathname || "/dashboard", { replace: true });
     }
 
   } 
-  catch (err) {
+  catch {
     toast.error("❌ Invalid username or password");
   }
 };
@@ -86,7 +88,7 @@ const [showPassword, setShowPassword] = useState(false);
           <button className="button">Login</button>
 
           <p>
-            New user? <Link to="/register">Register here</Link>
+            New user? <Link to="/register" state={location.state}>Register here</Link>
           </p>
 
           <p className="quote">

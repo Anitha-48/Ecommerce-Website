@@ -1,8 +1,9 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./css_fiels/ordersuccess.css"
 
 function OrderSuccess() {
   const navigate = useNavigate();
+  const { state } = useLocation();
 
   return (
     <div className="success-container">
@@ -11,16 +12,20 @@ function OrderSuccess() {
 
         <h1>🎉 Order Placed Successfully!</h1>
 
-        <p>Your delicious food is on the way 🚀</p>
+        {state?.orderId && <p>Order number: #{state.orderId}</p>}
+        <p>
+          {state?.paymentMethod === "cod"
+            ? "Pay cash when your order arrives."
+            : "Your payment is confirmed. Your order is being prepared."}
+        </p>
 
         <div className="actions">
           <button onClick={() => navigate("/dashboard")}>
-            Go to Dashboard
+            Continue shopping
           </button>
-
-          {/* <button onClick={() => navigate("/")}>
-            View Orders
-          </button> */}
+          <button onClick={() => navigate("/orders")}>
+            View orders
+          </button>
         </div>
 
       </div>

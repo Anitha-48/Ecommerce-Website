@@ -2,28 +2,22 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./css_fiels/order.css";
+import { API_BASE_URL } from "../api";
 
 function Cart() {
   const [cart, setCart] = useState([]);
   const navigate = useNavigate();
-
-  const token = localStorage.getItem("access_token");
-
-  const headers = {
-    Authorization: `Bearer ${token}`,
-  };
-
-  const BASE = "http://127.0.0.1:8000/";
+  const BASE = API_BASE_URL;
 
   useEffect(() => {
-    fetchCart();
-  }, []);
-
-  const fetchCart = () => {
-    axios.get(`${BASE}cart/`, { headers })   // ✅ FIXED
+    axios.get(`${BASE}cart/`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    })
       .then(res => setCart(res.data))
-      .catch(err => console.log(err));
-  };
+      .catch(() => console.error("Could not load cart."));
+  }, [BASE]);
 
   const total = cart.reduce(
     (sum, item) => sum + item.quantity * (item.product_price || 0),

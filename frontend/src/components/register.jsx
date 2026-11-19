@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import "./css_fiels/register.css"
 import { toast } from "react-toastify";
+import { API_BASE_URL } from "../api";
 
 function Register() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [user, setUser] = useState({
     username: "",
@@ -22,7 +24,7 @@ function Register() {
 
     try {
        await axios.post(
-        "http://127.0.0.1:8000/register/",
+        `${API_BASE_URL}register/`,
         user
       );
 
@@ -37,7 +39,7 @@ function Register() {
       // ❌ DO NOT STORE TOKEN HERE
       // ❌ NO AUTO LOGIN
 
-      navigate("/login"); // go to login page
+      navigate("/login", { state: location.state });
 
     } catch (err) {
       console.log(err.response);
