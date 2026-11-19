@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Product, Cart, Wishlist, Order, OrderItem,Contact
+from django.contrib.auth.password_validation import validate_password
+from .models import Product, Cart, Wishlist, Order, OrderItem, Contact
 
 
 #  REGISTER SERIALIZER
@@ -9,6 +10,10 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ["username", "email", "password"]
         extra_kwargs = {"password": {"write_only": True}}
+
+    def validate_password(self, value):
+        validate_password(value)
+        return value
 
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
@@ -55,34 +60,48 @@ class WishlistSerializer(serializers.ModelSerializer):
 
 # 🔹 ORDER ITEM SERIALIZER (🔥 FIX)
 class OrderItemSerializer(serializers.ModelSerializer):
+    product_name = serializers.CharField(read_only=True)
+    product_price = serializers.ReadOnlyField(source="unit_price")
+
     class Meta:
         model = OrderItem
-        fields = ["product", "quantity"]
+        fields = ["id", "product", "product_name", "product_price", "quantity"]
 
 
-# 🧾 ORDER SERIALIZER
 class OrderSerializer(serializers.ModelSerializer):
-    items = OrderItemSerializer(many=True)
+    items = OrderItemSerializer(source="orderitem_set", many=True, read_only=True)
+    username = serializers.ReadOnlyField(source="user.username")
 
     class Meta:
         model = Order
-        fields = ["id", "address", "phone", "total_price", "items"]
+        fields = [
+            "id",
+            "username",
+            "address",
+            "phone",
+            "total_price",
+            "payment_method",
+            "payment_status",
+            "status",
+            "created_at",
+            "items",
+        ]
 
-    def create(self, validated_data):
-        items_data = validated_data.pop("items")
-        user = self.context["request"].user
 
-        # ✅ CREATE ORDER
-        order = Order.objects.create(user=user, **validated_data)
+class CheckoutSerializer(serializers.Serializer):
+    address = serializers.CharField(max_length=1000)
+    phone = serializers.CharField(max_length=30)
+    payment_method = serializers.ChoiceField(choices=("cod", "razorpay"))
 
-        # ✅ CREATE ORDER ITEMS
-        for item in items_data:
-            OrderItem.objects.create(
-                order=order,
-                product=item["product"],   # 🔥 FIX (no extra query)
-                quantity=item["quantity"]
-            )
+    def validate_address(self, value):
+        value = value.strip()
+        if not value:
+            raise serializers.ValidationError("Delivery address is required.")
+        return value
 
-        return order
-    
+    def validate_phone(self, value):
+        value = value.strip()
+        if not value:
+            raise serializers.ValidationError("Phone number is required.")
+        return value
 
